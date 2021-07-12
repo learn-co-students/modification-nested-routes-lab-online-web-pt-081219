@@ -22,7 +22,11 @@ class ArtistsController < ApplicationController
   end
 
   def edit
-    @artist = Artist.find(params[:id])
+    if params[:song_id] && !Song.exists?(params[:song_id])
+      redirect_to artist_path, alert: "Song not found."
+    else
+      @artist = Artist.find(params[:id])
+    end
   end
 
   def update
@@ -47,6 +51,6 @@ class ArtistsController < ApplicationController
   private
 
   def artist_params
-    params.require(:artist).permit(:name)
+    params.require(:artist).permit(:name, :song_id)
   end
 end
